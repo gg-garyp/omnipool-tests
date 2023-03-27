@@ -1,5 +1,3 @@
-# Version 1.13
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -11,6 +9,7 @@ logging.basicConfig(filename='simulation_logs.log', level=logging.INFO, format='
 num_tokens = 10
 initial_prices = np.ones(num_tokens)
 pool_weights = np.full(num_tokens, 0.1)
+XYK = 5000
 
 def min_max_scaling(data):
     return (data - np.min(data)) / (np.max(data) - np.min(data))
@@ -67,6 +66,8 @@ num_iterations = 750
 
 token_values = []
 token_volumes = np.zeros((num_iterations, num_tokens))
+
+# Part 3 of 5
 
 for i in range(num_iterations):
     pool_weights = update_weights(pool_weights, liquidity, volume, volatility, market_cap)
@@ -141,19 +142,7 @@ for i in range(num_iterations):
     axs[1].set_ylabel("Total Pool Value")
 
     plt.xlabel("Iteration")
-    plt.show()
 
-    logging.info(f"Iteration {i}:")
-    logging.info(f"  Num tokens: {num_tokens}")
-    logging.info(f" High pool weight: {np.round(np.max(pool_weights), 4)}")
-    logging.info(f" Low pool weight: {np.round(np.min(pool_weights), 4)}")
-    logging.info(f" Avg pool weight: {np.round(np.mean(pool_weights), 4)}")
-
-    for j in range(num_tokens):
-        token_volume = token_volumes[i, j]
-        logging.info(f"  Token {j+1} volume: {np.round(token_volume, 4)}")
-
-    total_pool_value = np.sum(pool_weights * pool_prices)
-    logging.info(f" Total pool value: {np.round(total_pool_value, 4)}")
-
+    plt.savefig(f"plots/run_{i}.png")
+    plt.clf()
 
